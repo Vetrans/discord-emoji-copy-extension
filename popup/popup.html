@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discord Emoji Downloader</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Top Header -->
+    <header class="popup-header">
+      <div class="header-brand">
+        <svg class="header-logo" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5v-5h3l-4-4-4 4h3v5h2zm-7 1.5v2h12v-2H6z"/>
+        </svg>
+        <span class="header-title">DiscordKit Downloader</span>
+      </div>
+      <div class="header-status" id="header-status">
+        <span class="status-dot online"></span>
+        <span id="status-label">Ready</span>
+      </div>
+    </header>
+
+    <!-- Main View (When on Discord) -->
+    <div id="discord-view" class="view-section">
+      <!-- Server Selection & Search -->
+      <div class="selection-row">
+        <select id="server-select" class="dropdown-select" title="Choose server">
+          <option value="">Detecting server...</option>
+        </select>
+        <button id="refresh-btn" class="icon-button" title="Refresh emojis">🔄</button>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="filter-row">
+        <input type="text" id="search-input" class="search-field" placeholder="Search emojis & stickers..." />
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="tabs-bar">
+        <button class="filter-tab active" data-tab="all" id="tab-all">All (<span id="count-all">0</span>)</button>
+        <button class="filter-tab" data-tab="static" id="tab-static">Static (<span id="count-static">0</span>)</button>
+        <button class="filter-tab" data-tab="animated" id="tab-animated">GIF (<span id="count-animated">0</span>)</button>
+        <button class="filter-tab" data-tab="stickers" id="tab-stickers">Stickers (<span id="count-stickers">0</span>)</button>
+      </div>
+
+      <!-- Selection Controls -->
+      <div class="sub-bar">
+        <div class="selection-info">
+          Selected: <strong id="selected-count">0</strong> / <span id="total-count">0</span>
+        </div>
+        <div class="selection-actions">
+          <button id="select-all-btn" class="text-btn">Select All</button>
+          <span class="sep">•</span>
+          <button id="deselect-all-btn" class="text-btn">Deselect</button>
+        </div>
+      </div>
+
+      <!-- Emojis & Stickers Grid -->
+      <div class="grid-container" id="grid-container">
+        <div class="loading-state" id="loading-state">
+          <div class="spinner"></div>
+          <p>Loading server emojis...</p>
+        </div>
+        <div class="grid" id="asset-grid" style="display: none;"></div>
+      </div>
+
+      <!-- Progress Section (Hidden while idle) -->
+      <div class="progress-section" id="progress-section" style="display: none;">
+        <div class="progress-info">
+          <span id="progress-status">Downloading...</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Options & Action Footer -->
+      <footer class="popup-footer">
+        <div class="footer-options">
+          <label class="checkbox-option">
+            <input type="checkbox" id="opt-folders" checked />
+            <span>Organize into folders</span>
+          </label>
+          <select id="opt-quality" class="quality-select" title="Download Quality">
+            <option value="256" selected>High (256px)</option>
+            <option value="128">Standard (128px)</option>
+            <option value="512">Ultra (512px)</option>
+            <option value="64">Compact (64px)</option>
+          </select>
+        </div>
+
+        <div class="footer-buttons">
+          <button id="btn-copy-server" class="btn btn-clone" disabled title="Copy selected emojis directly to another server">📋 Copy to Server</button>
+          <button id="btn-dl-all" class="btn btn-secondary">Download All</button>
+          <button id="btn-dl-selected" class="btn btn-primary" disabled>Download (0)</button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Fallback View (When not on Discord) -->
+    <div id="not-discord-view" class="view-section" style="display: none;">
+      <div class="not-discord-card">
+        <div class="card-icon">💬</div>
+        <h3>Discord Not Detected</h3>
+        <p>Please open Discord in your browser to automatically capture and download server emojis and stickers.</p>
+        <button id="btn-open-discord" class="btn btn-primary full-width">Open Discord Web</button>
+      </div>
+
+      <div class="manual-section">
+        <h4>Or Manual Guild Lookup</h4>
+        <input type="text" id="manual-guild-id" class="input-field" placeholder="Server (Guild) ID" />
+        <input type="password" id="manual-token" class="input-field" placeholder="Discord Token (Optional)" />
+        <button id="btn-manual-fetch" class="btn btn-secondary full-width">Fetch Emojis</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../utils/zip.js"></script>
+  <script src="../utils/discord-api.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

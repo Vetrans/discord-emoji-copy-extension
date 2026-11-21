@@ -1,0 +1,14 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode/
+.idea/
+
+# Package outputs
+*.zip
+*.crx
+node_modules/
+dist/
+build/
